@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bio-Crypt Search Engine</title>
+    <style>
+        /* Base Theme */
+        body { 
+            background-color: #0d1117; 
+            color: #c9d1d9; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container { 
+            width: 100%;
+            max-width: 850px; 
+        }
+
+        /* Header Styling */
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: #58a6ff; font-size: 28px; letter-spacing: 2px; margin-bottom: 5px; }
+        .header p { color: #8b949e; font-family: monospace; font-size: 14px; }
+
+        /* UI Cards */
+        .card {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            margin-bottom: 25px;
+        }
+
+        /* Input Fields */
+        .form-group { margin-bottom: 25px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #e6edf3; font-size: 15px; }
+        
+        input[type="text"] { 
+            width: 100%; 
+            padding: 14px; 
+            background-color: #010409; 
+            border: 1px solid #30363d; 
+            border-radius: 6px;
+            color: #58a6ff; 
+            font-family: monospace; 
+            font-size: 15px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #58a6ff;
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3);
+        }
+
+        /* The Execute Button with Animations */
+        button { 
+            width: 100%;
+            background-color: #238636; 
+            color: #ffffff; 
+            padding: 16px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 6px;
+            cursor: pointer; 
+            font-weight: bold; 
+            font-size: 16px;
+            letter-spacing: 1px;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 10px rgba(35, 134, 54, 0.2);
+        }
+        
+        button:hover { 
+            background-color: #2ea043; 
+            box-shadow: 0 0 20px rgba(46, 160, 67, 0.6); 
+        }
+
+        button:active { transform: scale(0.98); }
+        
+        button:disabled {
+            background-color: #1f6feb;
+            border-color: #1f6feb;
+            box-shadow: 0 0 20px rgba(31, 111, 235, 0.6);
+            cursor: not-allowed;
+            color: white;
+            transform: none;
+        }
+
+        /* Output Terminal */
+        .output-box { 
+            background-color: #010409; 
+            padding: 25px; 
+            border-radius: 6px;
+            border-left: 4px solid #58a6ff;
+            font-family: monospace;
+            font-size: 15px;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+        
+        .output-box h3 {
+            margin-top: 0;
+            color: #8b949e;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 10px;
+        }
+
+        /* Custom Colors applied via JavaScript */
+        .success-text { color: #3fb950; font-weight: bold; }
+        .error-text { color: #f85149; font-weight: bold; }
+        .warn-text { color: #d29922; }
+        pre { margin: 0; color: #c9d1d9; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <div class="header">
+            <h1>BIO-CRYPT ALGORITHM</h1>
+            <p>In-Silico Primer Design & Genomic Search Engine</p>
+        </div>
+
+        <div class="card">
+            <form method="POST" id="searchForm">
+                <div class="form-group">
+                    <label>Target Viral Genome (Haystack Sequence):</label>
+                    <input type="text" name="genome" placeholder="e.g. ATGCGTACGTTAGCTAGCTAAGCTAA..." required>
+                </div>
+                <div class="form-group">
+                    <label>Target Gene (Needle Sequence):</label>
+                    <input type="text" name="target" placeholder="Paste the specific sequence to target..." required>
+                </div>
+                <button type="submit" id="executeBtn">EXECUTE PCR SEARCH</button>
+            </form>
+        </div>
+
+        {% if output %}
+        <div class="card">
+            <div class="output-box">
+                <h3>C++ Engine Terminal Output</h3>
+                <pre id="terminalOutput">{{ output }}</pre> 
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <script>
+        // FAKE LOADING SEQUENCE
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault(); 
+            
+            var btn = document.getElementById('executeBtn');
+            var form = this;
+            
+            btn.disabled = true;
+            
+            let steps = [
+                "[1/4] Initializing C++ Engine...",
+                "[2/4] Designing Optimal Primer...",
+                "[3/4] Validating Thermodynamics...",
+                "[4/4] Executing Genome Search..."
+            ];
+            
+            let stepIndex = 0;
+            
+            let interval = setInterval(function() {
+                if (stepIndex < steps.length) {
+                    btn.innerHTML = steps[stepIndex];
+                    stepIndex++;
+                } else {
+                    clearInterval(interval);
+                    form.submit(); 
+                }
+            }, 600);
+        });
+
+        // COLOR INJECTION SCRIPT
+        window.onload = function() {
+            var outBox = document.getElementById('terminalOutput');
+            if (outBox) {
+                let text = outBox.innerHTML;
+                
+                text = text.replace(/>>> SUCCESS:/g, '<span class="success-text">>>> SUCCESS:</span>');
+                text = text.replace(/>>> ERROR:/g, '<span class="error-text">>>> ERROR:</span>');
+                
+                text = text.replace(/\[PASS\] Good primer length/g, '<span class="success-text">✔ IDEAL</span>');
+                text = text.replace(/\[PASS\] GC content optimal/g, '<span class="success-text">✔ OPTIMAL</span>');
+                text = text.replace(/\[PASS\] Melting Temperature optimal/g, '<span class="success-text">✔ STABLE</span>');
+                
+                text = text.replace(/\[WARN\]/g, '<span class="warn-text">⚠ WARNING:</span>');
+
+                outBox.innerHTML = text;
+            }
+        };
+    </script>
+</body>
+</html>
