@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 import subprocess
+import platform
 
 app = Flask(__name__)
 
@@ -10,12 +11,15 @@ def home():
         genome = request.form['genome']
         target = request.form['target']
         
-        # This calls your compiled C++ program and catches what it prints
+        # --- THE FIX: Cross-Platform Engine Path ---
+        # If on your laptop (Windows), use .exe. If on Render (Linux), drop the .exe
+        engine_path = './primer_engine.exe' if platform.system() == 'Windows' else './primer_engine'
+        
         try:
-            result = subprocess.run(['./primer_engine.exe', genome, target], capture_output=True, text=True)
+            result = subprocess.run([engine_path, genome, target], capture_output=True, text=True)
             output = result.stdout
         except Exception as e:
-            output = f">>> ERROR: Running C++ Engine Failed. Did you compile primer_engine.cpp?\nDetails: {e} <<<"
+            output = f">>> ERROR: Running C++ Engine Failed.\nDetails: {e} <<<"
             
     return render_template('index.html', output=output)
 
