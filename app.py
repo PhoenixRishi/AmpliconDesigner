@@ -10,9 +10,7 @@ def home():
     if request.method == 'POST':
         genome = request.form['genome']
         target = request.form['target']
-        
-        # --- THE FIX: Cross-Platform Engine Path ---
-        # If on your laptop (Windows), use .exe. If on Render (Linux), drop the .exe
+
         engine_path = './primer_engine.exe' if platform.system() == 'Windows' else './primer_engine'
         
         try:

@@ -5,7 +5,6 @@
 
 using namespace std;
 
-// --- Calculate Melting Temperature (Tm) ---
 int calculateMeltingTemp(string primer) {
     int aCount = 0, tCount = 0, gCount = 0, cCount = 0;
     for (char base : primer) {
@@ -17,7 +16,6 @@ int calculateMeltingTemp(string primer) {
     return (2 * (aCount + tCount)) + (4 * (gCount + cCount));
 }
 
-// --- Primer Validation ---
 void validatePrimer(string primer) {
     int length = primer.length();
     cout << "\n[Primer Validation Report]\n";
@@ -32,21 +30,17 @@ void validatePrimer(string primer) {
         if (c == 'G' || c == 'C') gcCount++;
     }
     double gcContent = (double)gcCount / length * 100;
-    
     cout << fixed << setprecision(1);
-    cout << "\nGC Content: " << gcContent << "%\n";
+    cout << "\nGC Content (%): " << gcContent << "%\n";
     if (gcContent >= 40 && gcContent <= 60) cout << "  [PASS] GC content optimal\n";
     else cout << "  [WARN] GC content out of bounds (ideal 40-60%)\n";
-
     int tm = calculateMeltingTemp(primer);
-    cout << "\nMelting Temp (Tm): " << tm << "C\n";
+    cout << "\nMelting Temperature (Tm): " << tm << "C\n";
     if (tm >= 50 && tm <= 65) cout << "  [PASS] Melting Temperature optimal\n";
     else cout << "  [WARN] Melting Temperature out of bounds (ideal 50-65C)\n";
-        
     cout << "--------------------------\n";
 }
 
-// --- Generate Complementary Primer ---
 string generatePrimer(string target) {
     string primer = "";
     for (char base : target) {
@@ -58,7 +52,6 @@ string generatePrimer(string target) {
     return primer;
 }
 
-// --- MAIN PROGRAM (WEB VERSION) ---
 int main(int argc, char* argv[]) {
     // This expects the Python server to hand it the genome and target instantly
     if (argc < 3) {
@@ -85,7 +78,6 @@ int main(int argc, char* argv[]) {
 
     if (foundPosition != string::npos) {
         cout << "\n>>> SUCCESS: Primer annealed at position " << foundPosition << " <<<\n\n";
-        
         cout << "Genome:  " << genome.substr(foundPosition, targetSequence.length()) << "\n";
         cout << "         ";
         for (size_t i = 0; i < targetSequence.length(); i++) cout << "|";
