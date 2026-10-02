@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bio-Crypt Search Engine</title>
+    <title>Amplicon Designer</title>
     <style>
         /* Base Theme */
         body { 
@@ -40,20 +40,23 @@
         .form-group { margin-bottom: 25px; }
         label { display: block; margin-bottom: 8px; font-weight: 600; color: #e6edf3; font-size: 15px; }
         
-        input[type="text"] { 
-            width: 100%; 
-            padding: 14px; 
-            background-color: #010409; 
-            border: 1px solid #30363d; 
-            border-radius: 6px;
-            color: #58a6ff; 
-            font-family: monospace; 
-            font-size: 15px;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
+        input[type="text"],
+textarea {
+        width: 100%;
+        padding: 14px;
+        background-color: #010409;
+        border: 1px solid #30363d;
+        border-radius: 6px;
+        color: #58a6ff;
+        font-family: monospace;
+        font-size: 15px;
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+        resize: vertical;
         }
 
-        input[type="text"]:focus {
+        input[type="text"]:focus,   
+        textarea:focus {
             outline: none;
             border-color: #58a6ff;
             box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3);
@@ -124,83 +127,74 @@
     <div class="container">
         
         <div class="header">
-            <h1>BIO-CRYPT ALGORITHM</h1>
-            <p>In-Silico Primer Design & Genomic Search Engine</p>
+            <h1>AMPLICON DESIGNER</h1>
+    <p>Primer Design, Validation & PCR Analysis</p>
         </div>
 
         <div class="card">
             <form method="POST" id="searchForm">
                 <div class="form-group">
-                    <label>DNA Genome Sequence:</label>
-                    <input type="text" name="genome" placeholder="e.g. ATGCGTACGTTAGCTAGCTAAGCTAA..." required>
-                </div>
+    <label>Genome Sequence:</label>
+    <textarea name="genome"
+              rows="6"
+              placeholder="Paste genome sequence here..."
+              required>{{ genome }}</textarea>
+</div>
                 <div class="form-group">
-                    <label>Target Gene:</label>
-                    <input type="text" name="target" placeholder="Paste the specific sequence to target..." required>
+                    <label>Target Sequence:</label>
+                    <input type="text" name="target" value="{{ target }}" placeholder="Paste the specific sequence to target..." required>
                 </div>
-                <button type="submit" id="executeBtn">RUN PRIMER ANALYSIS</button>
-            </form>
+                    <button type="submit" id="executeBtn">ANALYZE</button></form>
         </div>
 
-        {% if output %}
-        <div class="card">
-            <div class="output-box">
-                <h3>C++ Engine Terminal Output</h3>
-                <pre id="terminalOutput">{{ output }}</pre> 
+                 {% if output %}
+                <div class="card">
+                    <div class="output-box">
+                        <h3>Amplicon Design Report</h3>
+                    <p style="color:#8b949e; font-size:13.5px; margin-top:-5px;">
+                        Method: Approximate Tm | Simplified Hairpin & Dimer Screening
+                    </p>
+                    <hr style="border:0; border-top:1px solid #30363d; margin:10px 0;">
+                <pre id="terminalOutput">{{ output }}</pre>
             </div>
         </div>
-        {% endif %}
+    {% endif %}
 
     </div>
-
-    <script>
-        // FAKE LOADING SEQUENCE
-        document.getElementById('searchForm').addEventListener('submit', function(e) {
-            e.preventDefault(); 
-            
-            var btn = document.getElementById('executeBtn');
-            var form = this;
-            
-            btn.disabled = true;
-            
-            let steps = [
-                "[1/4] Initializing C++ Engine...",
-                "[2/4] Designing Optimal Primer...",
-                "[3/4] Validating Thermodynamics...",
-                "[4/4] Executing Genome Search..."
-            ];
-            
-            let stepIndex = 0;
-            
-            let interval = setInterval(function() {
-                if (stepIndex < steps.length) {
-                    btn.innerHTML = steps[stepIndex];
-                    stepIndex++;
-                } else {
-                    clearInterval(interval);
-                    form.submit(); 
-                }
-            }, 600);
-        });
-
-        // COLOR INJECTION SCRIPT
-        window.onload = function() {
-            var outBox = document.getElementById('terminalOutput');
-            if (outBox) {
-                let text = outBox.innerHTML;
-                
-                text = text.replace(/>>> SUCCESS:/g, '<span class="success-text">>>> SUCCESS:</span>');
-                text = text.replace(/>>> ERROR:/g, '<span class="error-text">>>> ERROR:</span>');
-                
-                text = text.replace(/\[PASS\] Good primer length/g, '<span class="success-text">✔ IDEAL</span>');
-                text = text.replace(/\[PASS\] GC content optimal/g, '<span class="success-text">✔ OPTIMAL</span>');
-                text = text.replace(/\[PASS\] Melting Temperature optimal/g, '<span class="success-text">✔ STABLE</span>');
-                
-                text = text.replace(/\[WARN\]/g, '<span class="warn-text">⚠ WARNING:</span>');
-
-                outBox.innerHTML = text;
-            }
-        };
-    </script>
+<script>
+window.onload = function()
+{
+    var outBox = document.getElementById('terminalOutput');
+    if(outBox)
+    {
+        let text = outBox.innerHTML;
+        text = text.replace(
+            />>> SUCCESS:/g,
+            '<span class="success-text">>>> SUCCESS:</span>'
+        );
+        text = text.replace(
+            />>> ERROR:/g,
+            '<span class="error-text">>>> ERROR:</span>'
+        );
+        text = text.replace(
+            /PASS/g,
+            '<span style="color:#3fb950;font-weight:bold;">PASS</span>'
+        );
+        text = text.replace(
+            /\bWARN\b/g,
+            '<span style="color:#d29922;font-weight:bold;">WARN</span>'
+        );
+        text = text.replace(
+             /\bWARNING\b/g,
+            '<span style="color:#d29922;font-weight:bold;">WARNING</span>'
+        );
+        text = text.replace(
+            /FAIL/g,
+            '<span style="color:#f85149;font-weight:bold;">FAIL</span>'
+        );
+        outBox.innerHTML = text;
+    }
+};
+</script>
 </body>
 </html>

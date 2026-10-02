@@ -1,2 +1,11 @@
-primer_engine.exe
 __pycache__/
+*.pyc
+
+.vscode/
+
+*.class
+*.exe
+
+.env
+
+.DS_Store
