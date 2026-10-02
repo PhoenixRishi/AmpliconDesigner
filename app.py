@@ -15,8 +15,8 @@ def home():
 
     if request.method == 'POST':
 
-        genome = request.form['genome']
-        target = request.form['target']
+        genome = ''.join(request.form['genome'].upper().split())
+        target = ''.join(request.form['target'].upper().split())
         try:
 
             result = subprocess.run(
